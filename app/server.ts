@@ -5,7 +5,7 @@ import multerS3 from 'multer-s3';
 
 // Import WelcomeController from controllers entry point
 import { WelcomeController } from './controllers';
-import { AuthenticationController } from './controllers/authetication.controller';
+import { AuthenticationController } from './controllers/authentication.controller';
 
 // Create a new express application instance
 const app: express.Application = express();
@@ -17,8 +17,9 @@ const s3Config:S3 = new aws.S3({
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
     region: "us-east-1",
   });
-      
-let awsBucket = '';
+        
+let awsBucket : string = '';
+
 if (process.env.AWS_BUCKET) 
   awsBucket = process.env.AWS_BUCKET;
   
@@ -38,7 +39,7 @@ const upload = multer({
 // Mount the WelcomeController at the /welcome route
 app.use('/welcome', WelcomeController);
 
-app.use('/login', AuthenticationController);
+app.use('/user',AuthenticationController);
 
 app.post('/upload', () => { 
     upload.single('photo'), (req : Request, res : Response, next : any) => {
