@@ -27,10 +27,12 @@ router.delete('/', (req: Request, res: Response) => {
 // create user 
 router.post('/create', (req: Request, res: Response) => {
     // Extract the name from the request parameters
-    let { name } = req.params;
+    //let { name } = req.params;
+
+    console.log(req.body);
 
     // Greet the given name
-    res.send(`create, ${name}`);
+    res.send(`create`);
 });
 
 // login

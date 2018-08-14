@@ -1,4 +1,4 @@
-import express, {Request, Response } from 'express';
+import express,  { Request, Response } from 'express';
 import aws, {S3} from 'aws-sdk';
 import multer from 'multer';
 import multerS3 from 'multer-s3';
@@ -36,10 +36,12 @@ const upload = multer({
     })
 });
 
+app.use(express.json());
+
 // Mount the WelcomeController at the /welcome route
 app.use('/welcome', WelcomeController);
 
-app.use('/user',AuthenticationController);
+app.use('/user', AuthenticationController);
 
 app.post('/upload', () => { 
     upload.single('photo'), (req : Request, res : Response, next : any) => {
