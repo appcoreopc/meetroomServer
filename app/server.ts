@@ -39,9 +39,6 @@ const port: number = 3000;
 
 app.use(express.json());
 
-// Mount the WelcomeController at the /welcome route
-app.use('/welcome', WelcomeController);
-
 app.use('/user', AuthenticationController);
 
 app.use('/photo', PhotoController);
