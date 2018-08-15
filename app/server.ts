@@ -48,6 +48,13 @@ app.post('/upload', () => {
     res.json(req.file)
 }});
 
+app.get('/upload/:username', (req: Request, res: Response) => {
+
+  let { name } = req.params;
+  // Greet the given name
+  res.send(`Hello, ${name}`);
+});
+
 // Serve the application at the given port
 app.listen(port, () => {
     // Success callback

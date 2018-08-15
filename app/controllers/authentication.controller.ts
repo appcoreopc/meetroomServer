@@ -30,7 +30,6 @@ router.post('/create', (req: Request, res: Response) => {
     //let { name } = req.params;
 
     console.log(req.body);
-
     // Greet the given name
     res.send(`create`);
 });
