@@ -8,6 +8,7 @@ import { WelcomeController } from './controllers';
 import { AuthenticationController } from './controllers/authentication.controller';
 import { PhotoController } from './controllers/photo.controller';
 
+
 // Create a new express application instance
 const app: express.Application = express();
 // The port the express app will listen on
