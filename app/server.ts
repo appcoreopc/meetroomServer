@@ -1,13 +1,6 @@
-import express,  { Request, Response } from 'express';
-import aws, {S3} from 'aws-sdk';
-import multer from 'multer';
-import multerS3 from 'multer-s3';
-
-// Import WelcomeController from controllers entry point
-import { WelcomeController } from './controllers';
+import express from 'express';
 import { AuthenticationController } from './controllers/authentication.controller';
 import { PhotoController } from './controllers/photo.controller';
-
 
 // Create a new express application instance
 const app: express.Application = express();
