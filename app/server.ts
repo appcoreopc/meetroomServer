@@ -1,5 +1,6 @@
 import express from 'express';
 import { AuthenticationController } from './controllers/authentication.controller';
+import { UsersController } from './controllers/users.controller';
 import { PhotoController } from './controllers/photo.controller';
 
 // Create a new express application instance
@@ -33,7 +34,9 @@ const port: number = 3000;
 
 app.use(express.json());
 
-app.use('/user', AuthenticationController);
+app.use('/authenticate', AuthenticationController);
+
+app.use('/users', UsersController);
 
 app.use('/photo', PhotoController);
 
