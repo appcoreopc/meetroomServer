@@ -5,14 +5,27 @@ const endpoint = "https://localhost:8081";   // Add your endpoint
 const masterKey = "C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==";  // Add the masterkey of the endpoint
 //const client = new CosmosClient({endpoint, auth: { masterKey }});
 
+
+const querySpec = {
+    query: "SELECT * FROM root r WHERE r.completed=@completed",
+    parameters: [
+        {
+            name: "@completed",
+            value: false
+        }
+    ]
+};
+
 export class UserDao { 
-        
+    
     client : CosmosClient;
     databaseId : string; 
     collectionId : string;
     database : any = null;
     container : any = null;
-
+    
+    
+    
     constructor(cosmosClient : CosmosClient, databaseId : string, collectionId : string )
     { 
         this.client = cosmosClient;
@@ -26,15 +39,22 @@ export class UserDao {
         const dbResponse = await this.client.databases.createIfNotExists({
             id: this.databaseId
         });
-
+        
         this.database = dbResponse.database;
         console.log("Setting up the database...done!");
         console.log("Setting up the container...");
         const coResponse = await this.database.containers.createIfNotExists({
             id: this.collectionId
         });
-
+        
         this.container = coResponse.container;
         console.log("Setting up the container...done!");
+    }
+    
+    async find(querySpec : any) {         
+        const { result: results } = await this.container.items
+        .query(querySpec)
+        .toArray();
+        return results;           
     }
 }
