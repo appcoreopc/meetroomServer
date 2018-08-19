@@ -78,12 +78,9 @@ export class UserDao {
         const { body } = await this.container.item(itemId).read();
         return body;                
     }
-        
-    async removeUser() { 
-        
-        // const { body : doc } = await this.container.items({
-        //     'name' : 'jeremy', 
-        //     'password' : 'uGuessedit'
-        // })  
+    
+    async removeUser(itemId: int) { 
+        await this.container.item(itemId).delete(itemId);
+        console.log('Deleted item:\n${itemBody.id}\n');
     }
 }
