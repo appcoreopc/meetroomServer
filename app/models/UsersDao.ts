@@ -1,13 +1,22 @@
 
 import { CosmosClient, Database } from "@azure/cosmos";
+import { int } from "../../node_modules/aws-sdk/clients/datapipeline";
 
 const endpoint = "https://localhost:8081";   // Add your endpoint
 const masterKey = "C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==";  // Add the masterkey of the endpoint
 //const client = new CosmosClient({endpoint, auth: { masterKey }});
 
+// id
+// username
+// email 
+// role
+// datetime
+// organization
 
-const querySpec = {
-    query: "SELECT * FROM root r WHERE r.completed=@completed",
+// sample query spec //
+const userQuerySpec = {
+    
+    query: "SELECT * FROM users r WHERE r.completed=@completed",
     parameters: [
         {
             name: "@completed",
@@ -23,8 +32,6 @@ export class UserDao {
     collectionId : string;
     database : any = null;
     container : any = null;
-    
-    
     
     constructor(cosmosClient : CosmosClient, databaseId : string, collectionId : string )
     { 
@@ -56,5 +63,27 @@ export class UserDao {
         .query(querySpec)
         .toArray();
         return results;           
+    }
+    
+    async addUser() { 
+        
+        const { body : doc } = await this.container.items.create({
+            'name' : 'jeremy', 
+            'password' : 'uGuessedit'
+        })  
+    }
+    
+    async getUser(itemId: int) {       
+        
+        const { body } = await this.container.item(itemId).read();
+        return body;                
+    }
+        
+    async removeUser() { 
+        
+        // const { body : doc } = await this.container.items({
+        //     'name' : 'jeremy', 
+        //     'password' : 'uGuessedit'
+        // })  
     }
 }
