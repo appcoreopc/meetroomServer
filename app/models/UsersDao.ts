@@ -1,5 +1,6 @@
 
 import { CosmosClient, Database } from "@azure/cosmos";
+import { NOTIMP } from "dns";
 
 const endpoint = "https://localhost:8081";   // Add your endpoint
 const masterKey = "C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==";  // Add the masterkey of the endpoint
@@ -36,7 +37,7 @@ export class UserDao {
     { 
         this.client = cosmosClient;
         this.databaseId = databaseId;
-        this.collectionId = collectionId;
+        this.collectionId = collectionId;       
     }    
     
     async init() {
@@ -64,18 +65,34 @@ export class UserDao {
         return results;           
     }
     
-    async addUser() { 
-        
+    async addUser() {         
         const { body : doc } = await this.container.items.create({
             'name' : 'jeremy', 
             'password' : 'uGuessedit'
-        })  
+        }); 
+        console.log('inserted');
     }
     
     async getUser(itemId: string) {       
         
         const { body } = await this.container.item(itemId).read();
         return body;                
+    }
+
+
+    async getUsers() {
+
+        const querySpec = {
+            query: "SELECT * FROM Users "            
+        };
+    
+        const { result: results } = await this.container.items.query(querySpec).toArray();
+        
+        for (var queryResult of results) {
+            let resultString = JSON.stringify(queryResult);
+            console.log(`\tQuery returned ${resultString}\n`);
+        }
+
     }
     
     async removeUser(itemId: string) { 
