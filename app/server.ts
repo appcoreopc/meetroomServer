@@ -2,8 +2,7 @@ import express from 'express';
 import { AuthenticationController } from './controllers/authentication.controller';
 import { UsersController } from './controllers/users.controller';
 import { PhotoController } from './controllers/photo.controller';
-
-
+import * as bodyParser from "body-parser";
 // Create a new express application instance
 const app: express.Application = express();
 // The port the express app will listen on
@@ -34,6 +33,12 @@ const port: number = 3000;
 // });
 
 app.use(express.json());
+
+app.use(bodyParser.json());
+
+app.use(bodyParser.urlencoded({     
+    extended: true
+  })); 
 
 app.use('/authenticate', AuthenticationController);
 
