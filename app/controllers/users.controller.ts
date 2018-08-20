@@ -2,7 +2,7 @@
 import { Router, Request, Response } from 'express';
 import { UserDao } from '../models/UsersDao'; 
 import { CosmosClient } from "@azure/cosmos";
-var azure = require('azure-storage');
+import { AzureStorageService } from '../services/AzureStorageService';
 
 var multer = require('multer')
 var MulterAzureStorage = require('multer-azure-storage')
@@ -19,43 +19,25 @@ router.get('/', (req: Request, res: Response) => {
     
     //userDao.init();
     //let a = userDao.getUser('1');
-   
 
-    console.log('azure storage upload service');
-    var blobService = azure.createBlobService();
-    
-    blobService.createContainerIfNotExists('taskcontainer', {
-        publicAccessLevel: 'blob'
-    }, function(error:any, result:any, response:any) {
-        if (!error) {
-            // if result = true, container was created.
-            // if result = false, container already existed.
-        }
-    });  
 
-    blobService.createBlockBlobFromLocalFile('taskcontainer', 'serkoApp.json', 'serkoApp.json', function(error : any,
-         result: any, response : any) {
-        if (!error) {
-          // file uploaded
+    handleStorage();
 
-          console.log('file uploaded.');
-        }
 
-        console.log(error);
-      });
-    
-    // var upload = multer({
-    //     storage: new MulterAzureStorage({
-    //         azureStorageConnectionString: 'DefaultEndpointsProtocol=https;AccountName=mystorageaccount;AccountKey=mykey;EndpointSuffix=core.windows.net',
-    //         containerName: 'photos',
-    //         containerSecurity: 'blob'
-    //     })
-    // });    
-        
+
+  
     res.send('login, World!');
 });
 
+async function handleStorage() { 
 
+    const azureService = new AzureStorageService('taskcontainer');
+    let state = await azureService.upload('serkoApp.json', 'serkoApp.json');
+    let state3 = await azureService.upload('serkoApp.json', 'serkoApp2.json');
+    let state2 = await azureService.removeFile('serkoApp2.json');
+
+   
+}
 
 
 
