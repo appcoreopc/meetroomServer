@@ -10,8 +10,8 @@ var MulterAzureStorage = require('multer-azure-storage')
 const endpoint = "https://localhost:8081";   // Add your endpoint
 const masterKey = "C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==";  // Add the masterkey of the endpoint
 const client = new CosmosClient({endpoint, auth: { masterKey }});
-
 const userDao = new UserDao(client, 'meetroomdb', 'Users');
+
 // Assign router to the express.Router() instance
 const router: Router = Router();
 
@@ -19,13 +19,7 @@ router.get('/', (req: Request, res: Response) => {
     
     //userDao.init();
     //let a = userDao.getUser('1');
-
-
-    handleStorage();
-
-
-
-  
+    handleStorage();  
     res.send('login, World!');
 });
 
@@ -34,13 +28,8 @@ async function handleStorage() {
     const azureService = new AzureStorageService('taskcontainer');
     let state = await azureService.upload('serkoApp.json', 'serkoApp.json');
     let state3 = await azureService.upload('serkoApp.json', 'serkoApp2.json');
-    let state2 = await azureService.removeFile('serkoApp2.json');
-
-   
+    let state2 = await azureService.removeFile('serkoApp2.json');   
 }
-
-
-
 
 router.put('/', (req: Request, res: Response) => {
     // Reply with a hello world when no name param is provided

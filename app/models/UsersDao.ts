@@ -1,10 +1,6 @@
 
 import { CosmosClient, Database } from "@azure/cosmos";
 
-const endpoint = "https://localhost:8081";   // Add your endpoint
-const masterKey = "C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==";  // Add the masterkey of the endpoint
-//const client = new CosmosClient({endpoint, auth: { masterKey }});
-
 // id
 // username
 // email 
@@ -13,13 +9,18 @@ const masterKey = "C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGG
 // organization
 
 // sample query spec //
+
 const userQuerySpec = {
     
-    query: "SELECT * FROM users r WHERE r.completed=@completed",
+    query: "SELECT * FROM users r WHERE r.username=@username",
     parameters: [
         {
-            name: "@completed",
-            value: false
+            name: "@username",
+            value: 'jeremy'
+        },
+        {
+            name: "@password",
+            value: 'password'
         }
     ]
 };
@@ -37,6 +38,8 @@ export class UserDao {
         this.client = cosmosClient;
         this.databaseId = databaseId;
         this.collectionId = collectionId;
+        
+        this.init();
     }    
     
     async init() {
@@ -57,10 +60,8 @@ export class UserDao {
         console.log("Setting up the container...done!");
     }
     
-    async find(querySpec : any) {         
-        const { result: results } = await this.container.items
-        .query(querySpec)
-        .toArray();
+    async executeQuery(querySpec : any) {                        
+        const { result: results } = await this.container.items.query(querySpec).toArray();        
         return results;           
     }
     
@@ -68,11 +69,11 @@ export class UserDao {
         
         const { body : doc } = await this.container.items.create({
             'name' : 'jeremy', 
-            'password' : 'uGuessedit'
-        })  
+            'password' : 'password'
+        })          
     }
     
-    async getUser(itemId: string) {       
+    async getUser(itemId: string) {     
         
         const { body } = await this.container.item(itemId).read();
         return body;                
@@ -81,5 +82,30 @@ export class UserDao {
     async removeUser(itemId: string) { 
         await this.container.item(itemId).delete(itemId);
         console.log('Deleted item:\n${itemBody.id}\n');
+    }
+    
+    async authenticateUser(username : string, password : string) {
+        
+        const userQuerySpec = {
+            query: "SELECT * FROM users u WHERE u.username=@username AND u.password=@password",
+            parameters: [
+                {
+                    name: "@username",
+                    value: username
+                },
+                {
+                    name: "@password",
+                    value: password
+                }
+            ]
+        };
+        
+        let queryResult =  await this.executeQuery(userQuerySpec);  
+        console.log(queryResult);
+        
+        if (queryResult && queryResult.length > 0) { 
+            return true;            
+        }
+        return false;  
     }
 }
