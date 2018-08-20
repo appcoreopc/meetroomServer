@@ -3,6 +3,9 @@ import { Router, Request, Response } from 'express';
 import { UserDao } from '../models/UsersDao'; 
 import { CosmosClient } from "@azure/cosmos";
 
+var multer = require('multer')
+var MulterAzureStorage = require('multer-azure-storage')
+
 const endpoint = "https://localhost:8081";   // Add your endpoint
 const masterKey = "C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==";  // Add the masterkey of the endpoint
 const client = new CosmosClient({endpoint, auth: { masterKey }});
@@ -16,7 +19,15 @@ router.get('/', (req: Request, res: Response) => {
 
    userDao.init();
    let a = userDao.getUser('1');
-   
+
+   var upload = multer({
+    storage: new MulterAzureStorage({
+      azureStorageConnectionString: 'DefaultEndpointsProtocol=https;AccountName=mystorageaccount;AccountKey=mykey;EndpointSuffix=core.windows.net',
+      containerName: 'photos',
+      containerSecurity: 'blob'
+    })
+  });
+
     res.send('login, World!');
 });
 

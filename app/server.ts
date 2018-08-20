@@ -3,6 +3,7 @@ import { AuthenticationController } from './controllers/authentication.controlle
 import { UsersController } from './controllers/users.controller';
 import { PhotoController } from './controllers/photo.controller';
 
+
 // Create a new express application instance
 const app: express.Application = express();
 // The port the express app will listen on
@@ -55,6 +56,7 @@ app.use('/photo', PhotoController);
 // Serve the application at the given port
 app.listen(port, () => {
     // Success callback
+
     console.log(`Listening at http://localhost:${port}/`);
 });
 
