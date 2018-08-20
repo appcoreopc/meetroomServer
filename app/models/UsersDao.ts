@@ -1,6 +1,5 @@
 
 import { CosmosClient, Database } from "@azure/cosmos";
-import { int } from "../../node_modules/aws-sdk/clients/datapipeline";
 
 const endpoint = "https://localhost:8081";   // Add your endpoint
 const masterKey = "C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==";  // Add the masterkey of the endpoint
@@ -73,13 +72,13 @@ export class UserDao {
         })  
     }
     
-    async getUser(itemId: int) {       
+    async getUser(itemId: string) {       
         
         const { body } = await this.container.item(itemId).read();
         return body;                
     }
     
-    async removeUser(itemId: int) { 
+    async removeUser(itemId: string) { 
         await this.container.item(itemId).delete(itemId);
         console.log('Deleted item:\n${itemBody.id}\n');
     }
