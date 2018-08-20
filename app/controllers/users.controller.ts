@@ -38,7 +38,7 @@ router.put('/', (req: Request, res: Response) => {
 
 // delete user 
 router.delete('/', (req: Request, res: Response) => {
-    // Extract the name from the request parameters
+    // Extract the name fromusresthe request parameters
     let { name } = req.params;
     
     // Greet the given name
@@ -55,15 +55,15 @@ router.post('/create', (req: Request, res: Response) => {
     res.send(`create`);
 });
 
-// login
-router.post('/login', (req: Request, res: Response) => {
+// Update role //
+router.post('/updateRole', async (req: Request, res: Response) => {
     // Extract the name from the request parameters
-    let { name } = req.params;
-    
+    let { username, role} = req.body;
+    console.log(req.body);
+    let status = await userDao.updateUser(username, 1);    
     // Greet the given name   
-    res.send(`login, ${name}`);
+    res.send(`updated role`);
 });
-
 
 // Export the express.Router() instance to be used by server.ts
 export const UsersController: Router = router;

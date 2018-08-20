@@ -8,21 +8,19 @@ import { CosmosClient, Database } from "@azure/cosmos";
 // datetime
 // organization
 // sample query spec //
-
-const userQuerySpec = {
-    
-    query: "SELECT * FROM users r WHERE r.username=@username",
-    parameters: [
-        {
-            name: "@username",
-            value: 'jeremy'
-        },
-        {
-            name: "@password",
-            value: 'password'
-        }
-    ]
-};
+// const userQuerySpec = {    
+//     query: "SELECT * FROM users r WHERE r.username=@username",
+//     parameters: [
+//         {
+//             name: "@username",
+//             value: 'jeremy'
+//         },
+//         {
+//             name: "@password",
+//             value: 'password'
+//         }
+//     ]
+// };
 
 export class UserDao { 
     
@@ -72,13 +70,25 @@ export class UserDao {
         })          
     }
     
-    async getUser(itemId: string) {     
+    async getUser(username: string) {  
         
-        const { body } = await this.container.item(itemId).read();
-        return body;                
+        const userQuerySpec = {
+            query: "SELECT * FROM users u WHERE u.username=@username",
+            parameters: [
+                {
+                    name: "@username",
+                    value: username
+                }
+            ]
+        };
+        
+        let queryResult =  await this.executeQuery(userQuerySpec);  
+        console.log(queryResult);  
+        return queryResult; 
     }
     
     async removeUser(itemId: string) { 
+        
         await this.container.item(itemId).delete(itemId);
         console.log('Deleted item:\n${itemBody.id}\n');
     }
@@ -99,6 +109,7 @@ export class UserDao {
             ]
         };
         
+        
         let queryResult =  await this.executeQuery(userQuerySpec);  
         console.log(queryResult);
         
@@ -106,5 +117,25 @@ export class UserDao {
             return true;            
         }
         return false;  
+    }
+    
+    async updateUser(username : string, role : number) {
+        
+        let userDataResult = await this.getUser(username);
+        
+        if (userDataResult)        
+        {
+            console.log('able to retrieve item to update.');
+            userDataResult[0].username = username; 
+            // if (userDataResult.role) {
+            //     userDataResult.role = role;                 
+            // }
+            userDataResult[0].role = role;             
+            console.log(userDataResult);
+            const { body: replaced } = await this.container.item(userDataResult[0].id).replace(userDataResult[0]);
+            console.log(replaced);
+            return replaced;
+        }        
+        return null;        
     }
 }
