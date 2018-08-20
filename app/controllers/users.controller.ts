@@ -1,4 +1,3 @@
-
 import { Router, Request, Response } from 'express';
 import { UserDao } from '../models/UsersDao'; 
 import { CosmosClient } from "@azure/cosmos";
@@ -20,27 +19,18 @@ router.get('/', (req: Request, res: Response) => {
     //userDao.init();
     //let a = userDao.getUser('1');
 
-
-    handleStorage();
-
-
-
-  
+    handleStorageTest();
+ 
     res.send('login, World!');
 });
 
-async function handleStorage() { 
+async function handleStorageTest() { 
 
     const azureService = new AzureStorageService('taskcontainer');
     let state = await azureService.upload('serkoApp.json', 'serkoApp.json');
     let state3 = await azureService.upload('serkoApp.json', 'serkoApp2.json');
-    let state2 = await azureService.removeFile('serkoApp2.json');
-
-   
+    let state2 = await azureService.removeFile('serkoApp2.json');   
 }
-
-
-
 
 router.put('/', (req: Request, res: Response) => {
     // Reply with a hello world when no name param is provided
@@ -74,7 +64,6 @@ router.post('/login', (req: Request, res: Response) => {
     // Greet the given name   
     res.send(`login, ${name}`);
 });
-
 
 // Export the express.Router() instance to be used by server.ts
 export const UsersController: Router = router;
