@@ -15,7 +15,6 @@ const userDao = new UserDao(client, 'meetroomdb', 'Users');
 // Assign router to the express.Router() instance
 const router: Router = Router();
 
-
 router.get('/all', async (req: Request, res: Response) => { 
     console.log('get all users');
     let userResult = await userDao.getAll();  
@@ -47,7 +46,7 @@ router.put('/', async (req: Request, res: Response) => {
 });
 
 // delete user 
-router.delete('/', async (req: Request, res: Response) => {
+router.delete('/:userid', async (req: Request, res: Response) => {
     // Extract the name fromusresthe request parameters
     let { name } = req.params;
     

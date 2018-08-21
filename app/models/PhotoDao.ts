@@ -3,7 +3,13 @@ import { CosmosClient, Database } from "@azure/cosmos";
 
 const endpoint = "https://localhost:8081";   // Add your endpoint
 const masterKey = "C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==";  
-//const client = new CosmosClient({endpoint, auth: { masterKey }});
+
+// {  
+//   "info" : "text", 
+//   "url" : "imageurl",
+//   "username" : "jeremy"
+// }
+
 
 export class PhotoDao { 
         
@@ -18,6 +24,8 @@ export class PhotoDao {
         this.client = cosmosClient;
         this.databaseId = databaseId;
         this.collectionId = collectionId;
+
+        this.init();
     }    
     
     async init() {
@@ -38,4 +46,43 @@ export class PhotoDao {
         this.container = coResponse.container;
         console.log("Setting up the container...done!");
     }
+
+
+    async getUserPhoto(username : string) { 
+
+        const userQuerySpec = {
+            query: "SELECT * FROM Photos u WHERE u.username=@username",
+            parameters: [
+                {
+                    name: "@username",
+                    value: username
+                }]
+        };     
+
+        let queryResult =  await this.executeQuery(userQuerySpec);  
+        return queryResult; 
+    }
+    
+    async getPhoto(photoId : string ) { 
+
+        const userQuerySpec = {
+            query: "SELECT * FROM Photos u WHERE u.id=@photoId",
+            parameters: [
+                {
+                    name: "@photoId",
+                    value: photoId
+                }]
+        };   
+
+        let queryResult =  await this.executeQuery(userQuerySpec);  
+        return queryResult; 
+    }
+
+    async executeQuery(querySpec : any) { 
+
+        const { result: results } = await this.container.items.query(querySpec).toArray();        
+        return results;           
+    }
+
+
 }
