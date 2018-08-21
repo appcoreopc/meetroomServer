@@ -12,8 +12,15 @@ if (process.env.AWS_BUCKET)
 const endpoint = Config.endpoint;  
 const masterKey = Config.masterKey;
 
-console.log('endpoint ' + endpoint);
-console.log('masterKey ' + masterKey);
+var multer = require('multer')
+var MulterAzureStorage = require('multer-azure-storage')
+var upload = multer({
+  storage: new MulterAzureStorage({
+    azureStorageConnectionString: '',
+    containerName: 'photos',
+    containerSecurity: 'blob'
+  })
+})
 
 const client = new CosmosClient({ endpoint, auth: { masterKey }});
 const photoProvider = new PhotoDao(client, Config.databaseId, Config.photoCollection);
@@ -23,10 +30,11 @@ const router: Router = Router();
 //1. upload to azure s3 and
 //2. update cosmodb database
 
-router.post('/', async () => { 
-    //upload.single('photo'), (req : Request, res : Response, next : any) => {
-    //res.json(req.file)
-});
+router.post('/', upload.single('image'), function (req, res, next) {
+  // req.file is the `avatar` file
+  // req.body will hold the text fields, if there were any
+  res.send("result");
+})
 
 // Get by user 
 router.get('/user/:username', async (req: Request, res: Response) => {
