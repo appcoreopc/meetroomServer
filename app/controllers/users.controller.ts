@@ -3,14 +3,16 @@ import { Router, Request, Response } from 'express';
 import { UserDao } from '../models/UsersDao'; 
 import { CosmosClient } from "@azure/cosmos";
 import { AzureStorageService } from '../services/AzureStorageService';
+import { Config } from '../config';
 
 var multer = require('multer')
 var MulterAzureStorage = require('multer-azure-storage')
 
-const endpoint = "https://localhost:8081";   // Add your endpoint
-const masterKey = "C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==";  // Add the masterkey of the endpoint
+const endpoint = Config.endpoint;  
+const masterKey = Config.masterKey;
+
 const client = new CosmosClient({endpoint, auth: { masterKey }});
-const userDao = new UserDao(client, 'meetroomdb', 'Users');
+const userDao = new UserDao(client, Config.databaseId, Config.userCollection);
 
 // Assign router to the express.Router() instance
 const router: Router = Router();
@@ -48,7 +50,7 @@ router.put('/', async (req: Request, res: Response) => {
 // delete user 
 router.delete('/:userid', async (req: Request, res: Response) => {
     // Extract the name fromusresthe request parameters
-    let { name } = req.params;
+    let { name } = req.params.userid;
     
     // Greet the given name
     res.send(`delete, ${name}`);

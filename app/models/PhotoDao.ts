@@ -51,7 +51,7 @@ export class PhotoDao {
     async getUserPhoto(username : string) { 
 
         const userQuerySpec = {
-            query: "SELECT * FROM Photos u WHERE u.username=@username",
+            query: "SELECT * FROM photos u WHERE u.username=@username",
             parameters: [
                 {
                     name: "@username",
@@ -66,7 +66,7 @@ export class PhotoDao {
     async getPhoto(photoId : string ) { 
 
         const userQuerySpec = {
-            query: "SELECT * FROM Photos u WHERE u.id=@photoId",
+            query: "SELECT * FROM photos u WHERE u.id=@photoId",
             parameters: [
                 {
                     name: "@photoId",

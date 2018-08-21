@@ -2,17 +2,21 @@
 import { Router, Request, Response } from 'express';
 import { PhotoDao } from '../models/PhotoDao';
 import { CosmosClient } from '@azure/cosmos';
+import { Config } from '../config';
        
 let awsBucket : string = '';
 
 if (process.env.AWS_BUCKET) 
   awsBucket = process.env.AWS_BUCKET;
 
-const endpoint = "https://localhost:8081";   // Add your endpoint
-const masterKey = "C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==";
+const endpoint = Config.endpoint;  
+const masterKey = Config.masterKey;
 
-const client = new CosmosClient({endpoint, auth: { masterKey }});
-const photoProvider = new PhotoDao(client, 'meetroomdb', 'Photos');
+console.log('endpoint ' + endpoint);
+console.log('masterKey ' + masterKey);
+
+const client = new CosmosClient({ endpoint, auth: { masterKey }});
+const photoProvider = new PhotoDao(client, Config.databaseId, Config.photoCollection);
 
 const router: Router = Router();
 
