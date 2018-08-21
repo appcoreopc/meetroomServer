@@ -41,20 +41,19 @@ export class UserDao {
     
     async init() {
         
-        console.log("Setting up the database...");
+        console.log("users : Setting up the database...");
         const dbResponse = await this.client.databases.createIfNotExists({
             id: this.databaseId
         });
         
         this.database = dbResponse.database;
-        console.log("Setting up the database...done!");
-        console.log("Setting up the container...");
+        console.log("users : Setting up the container...");
         const coResponse = await this.database.containers.createIfNotExists({
             id: this.collectionId
         });
         
         this.container = coResponse.container;
-        console.log("Setting up the container...done!");
+        console.log("users : Setting up the container...done!");
     }
     
     async executeQuery(querySpec : any) {                        
@@ -124,9 +123,10 @@ export class UserDao {
         console.log(queryResult);
         
         if (queryResult && queryResult.length > 0) { 
-            return true;            
+            return { username : username, role : queryResult[0].role, status : 'true' };;            
         }
-        return false;  
+
+        return { username : username, role : -1, status : 'false' };  
     }
     
     async updateUser(username : string, role : number) {

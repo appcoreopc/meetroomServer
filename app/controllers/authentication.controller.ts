@@ -8,7 +8,7 @@ import { Config } from '../config';
 const endpoint = Config.endpoint;  
 const masterKey = Config.masterKey;''
 const client = new CosmosClient({endpoint, auth: { masterKey }});
-const userDao = new UserDao(client, 'meetroomdb', Config.userCollection);
+const userDao = new UserDao(client, Config.databaseId, Config.userCollection);
 
 // Assign router to the express.Router() instance
 const router: Router = Router();
@@ -18,11 +18,13 @@ router.post('/', async (req: Request, res: Response) => {
     // Extract the name from the request parameters
     console.log(req.body);    
     let { username, password } = req.body;
-    let authenticateResult:boolean = false;
+    let authenticateResult = {};
+
     if (username) {   
         let authenticateResult = await userDao.authenticateUser(username, password); 
         console.log(authenticateResult);
-        return authenticateResult;
+        console.log('processed authenticated db - sending back responses.');
+        //res.send(authenticateResult);
     }  
     // Greet the given name   
     res.send(authenticateResult);
