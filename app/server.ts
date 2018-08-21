@@ -2,6 +2,7 @@ import express from 'express';
 import { AuthenticationController } from './controllers/authentication.controller';
 import { UsersController } from './controllers/users.controller';
 import { PhotoController } from './controllers/photo.controller';
+
 import * as bodyParser from "body-parser";
 // Create a new express application instance
 const app: express.Application = express();
@@ -45,18 +46,6 @@ app.use('/authenticate', AuthenticationController);
 app.use('/users', UsersController);
 
 app.use('/photo', PhotoController);
-
-// app.post('/photo', () => { 
-//     upload.single('photo'), (req : Request, res : Response, next : any) => {
-//     res.json(req.file)
-// }});
-
-// app.get('/photo/:username', (req: Request, res: Response) => {
-
-//   let { name } = req.params;
-//   // Greet the given name
-//   res.send(`Hello, ${name}`);
-// });
 
 // Serve the application at the given port
 app.listen(port, () => {

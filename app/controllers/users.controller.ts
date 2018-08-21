@@ -15,12 +15,22 @@ const userDao = new UserDao(client, 'meetroomdb', 'Users');
 // Assign router to the express.Router() instance
 const router: Router = Router();
 
-router.get('/', (req: Request, res: Response) => {
-    
-    //userDao.init();
-    //let a = userDao.getUser('1');
-    handleStorage();  
-    res.send('login, World!');
+
+router.get('/all', async (req: Request, res: Response) => { 
+    console.log('get all users');
+    let userResult = await userDao.getAll();  
+    res.send(userResult);
+});
+
+router.get('/:username', async (req: Request, res: Response) => {  
+   
+    let userResult = null; 
+    let username = req.params.username;
+
+    if (username) {
+       userResult = await userDao.getUser(username);
+    }    
+    res.send(userResult);
 });
 
 async function handleStorage() { 
@@ -31,13 +41,13 @@ async function handleStorage() {
     let state2 = await azureService.removeFile('serkoApp2.json');   
 }
 
-router.put('/', (req: Request, res: Response) => {
+router.put('/', async (req: Request, res: Response) => {
     // Reply with a hello world when no name param is provided
     res.send('update, World!');
 });
 
 // delete user 
-router.delete('/', (req: Request, res: Response) => {
+router.delete('/', async (req: Request, res: Response) => {
     // Extract the name fromusresthe request parameters
     let { name } = req.params;
     
@@ -46,7 +56,7 @@ router.delete('/', (req: Request, res: Response) => {
 });
 
 // create user 
-router.post('/create', (req: Request, res: Response) => {
+router.post('/create', async (req: Request, res: Response) => {
     // Extract the name from the request parameters
     //let { name } = req.params;
     

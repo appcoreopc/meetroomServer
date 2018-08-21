@@ -81,9 +81,20 @@ export class UserDao {
                 }
             ]
         };
-        
+
         let queryResult =  await this.executeQuery(userQuerySpec);  
-        console.log(queryResult);  
+        return queryResult; 
+    }
+
+
+    async getAll() {  
+
+        const userQuerySpec = {
+            query: "SELECT * FROM users "
+        };
+                
+        let queryResult =  await this.executeQuery(userQuerySpec);  
+        console.log(queryResult);
         return queryResult; 
     }
     
@@ -107,8 +118,7 @@ export class UserDao {
                     value: password
                 }
             ]
-        };
-        
+        };        
         
         let queryResult =  await this.executeQuery(userQuerySpec);  
         console.log(queryResult);

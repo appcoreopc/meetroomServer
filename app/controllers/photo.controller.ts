@@ -9,13 +9,12 @@ if (process.env.AWS_BUCKET)
 // Assign router to the express.Router() instance
 const router: Router = Router();
 
-
-router.post('/', () => { 
+router.post('/', async () => { 
     //upload.single('photo'), (req : Request, res : Response, next : any) => {
     //res.json(req.file)
 });
 
-router.get('/:username', (req: Request, res: Response) => {
+router.get('/:username', async (req: Request, res: Response) => {
 
     let { name } = req.params;
     // Greet the given name
