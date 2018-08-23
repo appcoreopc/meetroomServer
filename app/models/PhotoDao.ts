@@ -30,21 +30,20 @@ export class PhotoDao {
     
     async init() {
         
-        console.log("Setting up the database...");
+        console.log("photos : Setting up the database...");
         const dbResponse = await this.client.databases.createIfNotExists({
             id: this.databaseId
         });
 
         this.database = dbResponse.database;
-        console.log("Setting up the database...done!");
-        console.log("Setting up the container...");
-
+        console.log("photos :Setting up the database...done!");
+      
         const coResponse = await this.database.containers.createIfNotExists({
             id: this.collectionId
         });
 
         this.container = coResponse.container;
-        console.log("Setting up the container...done!");
+        console.log("photos : Setting up the container...done!");
     }
 
 
