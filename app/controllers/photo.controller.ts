@@ -11,12 +11,13 @@ if (process.env.AWS_BUCKET)
 
 const endpoint = Config.endpoint;  
 const masterKey = Config.masterKey;
+const azureStoreConnectionString = Config.azureStoreConnectionString;
 
 var multer = require('multer')
 var MulterAzureStorage = require('multer-azure-storage')
 var upload = multer({
   storage: new MulterAzureStorage({
-    azureStorageConnectionString: '',
+    azureStorageConnectionString: azureStoreConnectionString,
     containerName: 'photos',
     containerSecurity: 'blob'
   })
