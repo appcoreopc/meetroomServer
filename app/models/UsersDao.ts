@@ -120,7 +120,7 @@ export class UserDao {
         };        
         
         let queryResult =  await this.executeQuery(userQuerySpec);  
-        console.log(queryResult);
+        //console.log(queryResult);
         
         if (queryResult && queryResult.length > 0) { 
             return { username : username, role : queryResult[0].role, status : 'true' };;            

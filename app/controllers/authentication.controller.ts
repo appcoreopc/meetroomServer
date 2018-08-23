@@ -12,21 +12,17 @@ const userDao = new UserDao(client, Config.databaseId, Config.userCollection);
 
 // Assign router to the express.Router() instance
 const router: Router = Router();
-
 // authenticate user 
 router.post('/', async (req: Request, res: Response) => {
-    // Extract the name from the request parameters
-    console.log(req.body);    
+    //console.log(req.body);    
     let { username, password } = req.body;
     let authenticateResult = {};
 
     if (username) {   
-        let authenticateResult = await userDao.authenticateUser(username, password); 
-        console.log(authenticateResult);
-        console.log('processed authenticated db - sending back responses.');
-        //res.send(authenticateResult);
-    }  
-    // Greet the given name   
+        authenticateResult = await userDao.authenticateUser(username, password); 
+        console.log('AUTHENTICATED form server');
+        console.log(authenticateResult);    
+    }    
     res.send(authenticateResult);
 });
 
