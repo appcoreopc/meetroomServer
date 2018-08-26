@@ -10,6 +10,11 @@ const masterKey = "C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGG
 //   "username" : "jeremy"
 // }
 
+export interface IPhotoInfo { 
+    username : string, 
+    url : string, 
+    description : string
+}
 
 export class PhotoDao { 
         
@@ -83,5 +88,14 @@ export class PhotoDao {
         return results;           
     }
 
+    async insertPhotoInfo(photoJsonData : IPhotoInfo) { 
+          
+        const { body : doc } = await this.container.items.create({
+            'username' : photoJsonData.username, 
+            'url' : photoJsonData.url, 
+            'description' : photoJsonData.description
+        });      
 
+        return doc;          
+    }
 }

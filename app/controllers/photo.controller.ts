@@ -1,6 +1,6 @@
 
 import { Router, Request, Response } from 'express';
-import { PhotoDao } from '../models/PhotoDao';
+import { PhotoDao, IPhotoInfo } from '../models/PhotoDao';
 import { CosmosClient } from '@azure/cosmos';
 import { Config } from '../config';
        
@@ -35,9 +35,17 @@ router.post('/', upload.single('image'), function (req, res, next) {
 
   let objectJson : any = res.json();  
   console.log(objectJson.req.body);
-  console.log(objectJson.req.file.url);   
-  // insert data into database //  
+  console.log(objectJson.req.file.url); 
+
+  const photoInfo = { 
+    username : req.body.username,
+    description : req.body.description, 
+    url : objectJson.req.file.url
+  }
   
+  photoProvider.insertPhotoInfo(photoInfo);
+  
+  // insert data into database //    
   // req.file is the `avatar` file
   // req.body will hold the text fields, if there were any
   //res.send("photo uploaded.");
