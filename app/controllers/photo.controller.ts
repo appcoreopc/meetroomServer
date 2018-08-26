@@ -32,9 +32,15 @@ const router: Router = Router();
 //2. update cosmodb database
 
 router.post('/', upload.single('image'), function (req, res, next) {
+
+  let objectJson : any = res.json();  
+  console.log(objectJson.req.body);
+  console.log(objectJson.req.file.url);   
+  // insert data into database //  
+  
   // req.file is the `avatar` file
   // req.body will hold the text fields, if there were any
-  res.send("result");
+  //res.send("photo uploaded.");
 })
 
 // Get by user 
