@@ -8,13 +8,16 @@ import { Config } from '../config';
 var multer = require('multer')
 var MulterAzureStorage = require('multer-azure-storage')
 
-const endpoint = Config.endpoint;  
-const masterKey = Config.masterKey;
+// const endpoint = Config.endpoint;  
+// const masterKey = Config.masterKey;
+
+const endpoint = "https://localhost:8081";   // Add your endpoint
+const masterKey = "C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==";
 
 const client = new CosmosClient({endpoint, auth: { masterKey }});
 const userDao = new UserDao(client, Config.databaseId, Config.userCollection);
 
-// Assign router to the express.Router() instance
+// Assign router to the express.Router() instanc
 const router: Router = Router();
 
 router.get('/all', async (req: Request, res: Response) => { 

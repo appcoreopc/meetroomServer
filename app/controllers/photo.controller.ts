@@ -9,8 +9,8 @@ let awsBucket : string = '';
 if (process.env.AWS_BUCKET) 
 awsBucket = process.env.AWS_BUCKET;
 
-const endpoint = Config.endpoint;  
-const masterKey = Config.masterKey;
+// const endpoint = Config.endpoint;  
+// const masterKey = Config.masterKey;
 const azureStoreConnectionString = Config.azureStoreConnectionString;
 
 var multer = require('multer')
@@ -22,6 +22,9 @@ var upload = multer({
     containerSecurity: 'blob'
   })
 })
+
+const endpoint = "https://localhost:8081";   // Add your endpoint
+const masterKey = "C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==";
 
 const client = new CosmosClient({ endpoint, auth: { masterKey }});
 const photoProvider = new PhotoDao(client, Config.databaseId, Config.photoCollection);
