@@ -22,6 +22,12 @@ import { CosmosClient, Database } from "@azure/cosmos";
 //     ]
 // };
 
+interface ILoginResult { 
+    username? : string, 
+    role? : string, 
+    status? : string
+}
+
 export class UserDao { 
     
     client : CosmosClient;
@@ -103,8 +109,8 @@ export class UserDao {
         console.log('Deleted item:\n${itemBody.id}\n');
     }
     
-    async authenticateUser(username : string, password : string) {
-        
+    async authenticateUser(username : string, password : string): Promise<ILoginResult> {
+             
         const userQuerySpec = {
             query: "SELECT * FROM users u WHERE u.username=@username AND u.password=@password",
             parameters: [
@@ -119,14 +125,19 @@ export class UserDao {
             ]
         };        
         
-        let queryResult =  await this.executeQuery(userQuerySpec);  
-        //console.log(queryResult);
+        let queryResult =  await this.executeQuery(userQuerySpec);          
         
-        if (queryResult && queryResult.length > 0) { 
-            return { username : username, role : queryResult[0].role, status : 'true' };;            
+        if (queryResult && queryResult.length > 0) {
+
+           let result = { username : username, role : queryResult[0].role, status : 'true' }            
+           return new Promise(resolve => {
+                resolve(result);
+             });                      
         }
 
-        return { username : username, role : -1, status : 'false' };  
+        return new Promise(resolve => {
+            resolve({ username : username, role : -1, status : 'false' });
+        })
     }
     
     async updateUser(username : string, role : number) {
