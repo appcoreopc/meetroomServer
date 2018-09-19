@@ -91,6 +91,25 @@ export class UserDao {
         return queryResult; 
     }
 
+    async getUserId(userid: string) {  
+        
+        const userQuerySpec = {
+            query: "SELECT * FROM users u WHERE u.id=@userid",
+            parameters: [
+                {
+                    name: "@userid",
+                    value: userid
+                }
+            ]
+        };
+
+        let queryResult =  await this.executeQuery(userQuerySpec);  
+        return queryResult; 
+    }
+
+
+    
+
 
     async getAll() {  
 
@@ -140,23 +159,25 @@ export class UserDao {
         })
     }
     
-    async updateUser(username : string, role : number) {
-        
-        let userDataResult = await this.getUser(username);
-        
-        if (userDataResult)        
-        {
-            console.log('able to retrieve item to update.');
-            userDataResult[0].username = username; 
-            // if (userDataResult.role) {
-            //     userDataResult.role = role;                 
-            // }
-            userDataResult[0].role = role;             
-            console.log(userDataResult);
-            const { body: replaced } = await this.container.item(userDataResult[0].id).replace(userDataResult[0]);
-            console.log(replaced);
-            return replaced;
-        }        
+    async updateUser(usersid : string[], role : number) {
+
+         for (let index = 0; index < usersid.length; index++) {
+             const element = usersid[index];
+
+             let userDataResult = await this.getUserId(element);
+
+             if (userDataResult)        
+             {
+                 console.log('able to retrieve item to update.');                
+                 userDataResult[0].role = role; 
+                  userDataResult[0].role = role;             
+                 console.log(userDataResult);
+                 const { body: replaced } = await this.container.item(userDataResult[0].id).replace(userDataResult[0]);
+                 console.log(replaced);
+                 return replaced;
+             }   
+         }
+                
         return null;        
     }
 }

@@ -62,21 +62,29 @@ router.delete('/:userid', async (req: Request, res: Response) => {
 // create user 
 router.post('/create', async (req: Request, res: Response) => {
     // Extract the name from the request parameters
-    //let { name } = req.params;
-    
+    //let { name } = req.params;    
     console.log(req.body);
     // Greet the given name
     res.send(`create`);
 });
 
 // Update role //
-router.post('/updateRole', async (req: Request, res: Response) => {
+router.post('/setAdmin', async (req: Request, res: Response) => {
     // Extract the name from the request parameters
-    let { username, role} = req.body;
+    let { username, role } = req.body;
     console.log(req.body);
-    let status = await userDao.updateUser(username, 1);    
+    //let status = await userDao.updateUser(username, 1);    
     // Greet the given name   
-    res.send(`updated role`);
+    res.send('set admin role');
+});
+
+router.post('/setNormalUser', async (req: Request, res: Response) => {
+    // Extract the name from the request parameters
+    let { username, role } = req.body;
+    console.log(req.body);
+    let status = await userDao.updateUser(username, 0);    
+    // Greet the given name   
+    res.send('set normal role');
 });
 
 // Export the express.Router() instance to be used by server.ts
