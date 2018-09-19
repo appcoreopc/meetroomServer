@@ -107,10 +107,6 @@ export class UserDao {
         return queryResult; 
     }
 
-
-    
-
-
     async getAll() {  
 
         const userQuerySpec = {
@@ -161,20 +157,23 @@ export class UserDao {
     
     async updateUser(usersid : string[], role : number) {
 
+        console.log('passed element', usersid);
+
          for (let index = 0; index < usersid.length; index++) {
-             const element = usersid[index];
+             let element = usersid[index];
+             console.log('gettting element id', element);
 
              let userDataResult = await this.getUserId(element);
 
              if (userDataResult)        
              {
-                 console.log('able to retrieve item to update.');                
+                 console.log('retrieve item to update.');                
                  userDataResult[0].role = role; 
-                  userDataResult[0].role = role;             
+                 userDataResult[0].role = role;             
                  console.log(userDataResult);
-                 const { body: replaced } = await this.container.item(userDataResult[0].id).replace(userDataResult[0]);
+                 const { body : replaced } = await this.container.item(userDataResult[0].id).replace(userDataResult[0]);
                  console.log(replaced);
-                 return replaced;
+                // return replaced;
              }   
          }
                 

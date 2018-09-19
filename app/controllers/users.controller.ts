@@ -71,9 +71,9 @@ router.post('/create', async (req: Request, res: Response) => {
 // Update role //
 router.post('/setAdmin', async (req: Request, res: Response) => {
     // Extract the name from the request parameters
-    let { username, role } = req.body;
+    let { usersId, role } = req.body;
     console.log(req.body);
-    //let status = await userDao.updateUser(username, 1);    
+    let status = await userDao.updateUser(usersId, role);    
     // Greet the given name   
     res.send('set admin role');
 });
