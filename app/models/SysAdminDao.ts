@@ -1,34 +1,13 @@
+import { CosmosClient } from "@azure/cosmos";
 
-import { CosmosClient, Database } from "@azure/cosmos";
-
-// id
-// username
-// email 
-// role
-// datetime
-// organization
-// sample query spec //
-// const userQuerySpec = {    
-//     query: "SELECT * FROM users r WHERE r.username=@username",
-//     parameters: [
-//         {
-//             name: "@username",
-//             value: 'jeremy'
-//         },
-//         {
-//             name: "@password",
-//             value: 'password'
-//         }
-//     ]
-// };
-
-interface ILoginResult { 
+interface IAdminUser {
     username? : string, 
-    role? : string, 
-    status? : string
+    avatorUrl? : string, 
+    firstname? : string,
+    lastname? : string
 }
 
-export class UserDao { 
+export class SysAdminDao { 
     
     client : CosmosClient;
     databaseId : string; 
@@ -47,19 +26,18 @@ export class UserDao {
     
     async init() {
         
-        console.log("users : Setting up the database...");
+        console.log("SysAdminDao : Setting up the SysAdminDao collection...");
         const dbResponse = await this.client.databases.createIfNotExists({
             id: this.databaseId
         });
         
         this.database = dbResponse.database;
-        console.log("users : Setting up the container...");
+        console.log("SysAdminDao : Setting up the container...");
         const coResponse = await this.database.containers.createIfNotExists({
             id: this.collectionId
-        });
-        
-        this.container = coResponse.container;
-        console.log("users : Setting up the container...done!");
+        });        
+
+        this.container = coResponse.container;        
     }
     
     async executeQuery(querySpec : any) {                        
@@ -67,18 +45,21 @@ export class UserDao {
         return results;           
     }
     
-    async addUser() { 
+    async addUser(adminUser : IAdminUser) { 
         
-        const { body : doc } = await this.container.items.create({
-            'name' : 'jeremy', 
-            'password' : 'password'
+        const { body : doc } = await this.container.items.create(
+        {
+            'username' : adminUser.username, 
+            'avatarUrl' : adminUser.avatorUrl,
+            'firstname' : adminUser.firstname, 
+            'lastbname' : adminUser.lastname
         })          
     }
     
     async getUser(username: string) {  
-        
-        const userQuerySpec = {
-            query: "SELECT * FROM users u WHERE u.username=@username",
+
+        const userQuerySpec = {            
+            query: "SELECT * FROM sysadmin u WHERE u.username=@username",
             parameters: [
                 {
                     name: "@username",
@@ -94,7 +75,7 @@ export class UserDao {
     async getUserId(userid: string) {  
         
         const userQuerySpec = {
-            query: "SELECT * FROM users u WHERE u.id=@userid",
+            query: "SELECT * FROM sysadmin u WHERE u.id=@userid",
             parameters: [
                 {
                     name: "@userid",
@@ -110,7 +91,7 @@ export class UserDao {
     async getAll() {  
 
         const userQuerySpec = {
-            query: "SELECT * FROM users "
+            query: "SELECT * FROM sysadmin "
         };
                 
         let queryResult =  await this.executeQuery(userQuerySpec);  
@@ -124,10 +105,10 @@ export class UserDao {
         console.log('Deleted item:\n${itemBody.id}\n');
     }
     
-    async authenticateUser(username : string, password : string): Promise<ILoginResult> {
+    async authenticateUser(username : string, password : string): Promise<IAdminUser> {
              
         const userQuerySpec = {
-            query: "SELECT * FROM users u WHERE u.username=@username AND u.password=@password",
+            query: "SELECT * FROM sysadmin u WHERE u.username=@username AND u.password=@password",
             parameters: [
                 {
                     name: "@username",
@@ -155,9 +136,8 @@ export class UserDao {
         })
     }
     
-
-    async updateUser(usersid : string[], role : number): Promise<Array<string>> {  
-
+    async updateUser(usersid : string[], role : number): Promise<Array<string>> {
+           
         let updatedUserList = [];
 
          for (let index = 0; index < usersid.length; index++) {
