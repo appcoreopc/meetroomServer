@@ -15,7 +15,6 @@ const userDao = new SysAdminDao(client, Config.databaseId, Config.sysadminCollec
 
 const router: Router = Router();
 
-
 router.get('/all', async (req: Request, res: Response) => { 
     console.log('get all sysadmin');
     let userResult = await userDao.getAll();  
